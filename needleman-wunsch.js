@@ -44,26 +44,20 @@ s1 = "CGTGAATTCAT";
 s2 = "GACTTAC";
 */
 
-var s1 = 'doctor told me that this was almost certainly a type of cancer that is incurable';
-var s2 = "About a year ago I was diagnosed with cancer. I had a scan at 7:30 in the morning, and it clearly showed a tumor on my pancreas. I didn’t even know what a pancreas was. The doctors told me this was almost certainly a type of cancer that is incurable, and that I should expect to live no longer than three to six months. My doctor advised me to go home and get my affairs in order, which is doctor’s code for prepare to die. It means to try to tell your kids everything you thought you’d have the next 10 years to tell them in just a few months. It means to make sure everything is buttoned up so that it will be as easy as possible for your family. It means to say your goodbyes. I lived with that diagnosis all day. Later that evening I had a biopsy, where they stuck an endoscope down my throat, through my stomach and into my intestines, put a needle into my pancreas and got a few cells from the tumor. I was sedated, but my wife, who was there, told me that when they viewed the cells under a microscope the doctors started crying because it turned out to be a very rare form of pancreatic cancer that is curable with surgery. I had the surgery and I’m fine now.";
+var s2 = 'doctor told me that this was almost certainly a type of cancer that is incurable';
+var s1 = "About a year ago I was diagnosed with cancer. I had a scan at 7:30 in the morning, and it clearly showed a tumor on my pancreas. I didn’t even know what a pancreas was. The doctors told me this was almost certainly a type of cancer that is incurable, and that I should expect to live no longer than three to six months. My doctor advised me to go home and get my affairs in order, which is doctor’s code for prepare to die. It means to try to tell your kids everything you thought you’d have the next 10 years to tell them in just a few months. It means to make sure everything is buttoned up so that it will be as easy as possible for your family. It means to say your goodbyes. I lived with that diagnosis all day. Later that evening I had a biopsy, where they stuck an endoscope down my throat, through my stomach and into my intestines, put a needle into my pancreas and got a few cells from the tumor. I was sedated, but my wife, who was there, told me that when they viewed the cells under a microscope the doctors started crying because it turned out to be a very rare form of pancreatic cancer that is curable with surgery. I had the surgery and I’m fine now.";
 
-s1 = s1.split(' ');
-s2 = s2.toLowerCase().replace(/\./g, '').replace(/\,/g, '').split(' ');
-//console.log(s1);
+function preProcessing(str) {
+    return str
+        .toLowerCase()
+        .replace(/\./g, '').replace(/\,/g, '')
+        .split(' ')
+        .map((word) => { return stem(word.trim()); })
+        .filter((word) => { return stopWords.indexOf(word) == -1; });
+}
 
-s2 = s2.map((word) => { return stem(word.trim()); });
-s1 = s1.map((word) => { return stem(word.trim()); });
-console.log(s1);
-console.log(s2);
-
-s2 = s2.filter(function(word) {
-    return stopWords.indexOf(word) == -1;
-})
-
-s1 = s1.filter(function(word) {
-    return stopWords.indexOf(word) == -1;
-});
-
+s1 = preProcessing(s1);
+s2 = preProcessing(s2);
 
 
 // Base componence (Cell)
@@ -106,26 +100,8 @@ function formatNumberLength(num, length) {
 
 function printTable(table, withArrow) {
     console.log('*** Printed table ***');
-    /*
-    for (var c = 0; c < table.length; c++) {
-        var row = table[c];
-        var rowString = '';
-        for (var r = 0; r < row.length; r++) {
-            rowString += formatNumberLength(row[r].score, 5);
 
-            if (withArrow) {
-                rowString += ' [' + formatNumberLength(row[r].arrows, 5) + ']';
-            }
-
-            if (r != table.length - 1)
-                rowString += ',';
-        }
-        console.log(rowString);
-    }
-    */
-
-    console.log(table.length);
-    console.log(table[0].length);
+    console.log('Table size: ' + table.length + ' X ' + table[0].length);
 
     for (var r = 0; r < table[0].length; r++) {
         var line = '';
@@ -230,7 +206,7 @@ for (var c = table.length - 1, r = table[0].length - 1; c > 0 || r > 0; ) {
             break;
 
         case 'A':
-            //alignedRow.push(sRow[r-1]);
+            alignedRow.push(sRow[r-1]);
             alignedCol.push('-');
             r -= 1;
             break;
@@ -254,7 +230,6 @@ alignedCol.reverse();
 for (var i = 0; i < Math.max(alignedRow.length, alignedCol.length); i++) {
     console.log(alignedRow[i] + ' \t ' + alignedCol[i]);
 }
-//console.log(alignedRow);
 
 return ;
 
