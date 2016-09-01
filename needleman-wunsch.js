@@ -138,8 +138,8 @@ console.log('New');
 printTable(table, true);
 
 // Track back the arrows to rebuild the aligned strings
-var alignedRow = '';
-var alignedCol = '';
+var alignedRow = [];
+var alignedCol = [];
 
 for (var r = table.length - 1; r > 0; ) {
     for (var c = table[0].length - 1; c > 0;) {
@@ -147,23 +147,23 @@ for (var r = table.length - 1; r > 0; ) {
         var arrows = table[c][r].arrows;
         //console.log(arrows);
 
-        switch (arrows[0]) {
+        switch (arrows[0]) { // TODO: Only supports the first path (diagonal path in priority)
             case 'D':
-                alignedRow = sRow[r-1] + ' ' + alignedRow;
-                alignedCol = sCol[c-1] + ' ' + alignedCol;
+                alignedRow.push(sRow[r-1]);
+                alignedCol.push(sCol[c-1]);
                 r -= 1;
                 c -= 1;
                 break;
 
             case 'L':
-                alignedRow = '-' + ' ' + alignedRow;
-                alignedCol = sCol[c-1] + ' ' + alignedCol;
+                alignedRow.push('-');
+                alignedCol.push(sCol[c-1]);
                 c -= 1;
                 break;
 
             case 'A':
-                alignedRow = sRow[r-1]+ ' ' + alignedRow;
-                alignedCol = '-'+ ' ' + alignedCol;
+                alignedRow.push(sRow[r-1]);
+                alignedCol.push('-');
                 r -= 1;
                 break;
 
@@ -174,6 +174,9 @@ for (var r = table.length - 1; r > 0; ) {
 
     }
 }
+
+alignedRow.reverse();
+alignedCol.reverse();
 
 console.log(alignedRow);
 console.log(alignedCol);
