@@ -1,5 +1,3 @@
-"use strict";
-
 // Unit of calculation (Cell)
 function Cell() {
   return {
@@ -9,6 +7,7 @@ function Cell() {
 }
 
 module.exports = (function() {
+    'use strict';
     // Utilities
     function formatNumberLength(num, length) {
         var r = "" + num;
@@ -67,11 +66,11 @@ module.exports = (function() {
         var inDelChar = (params && params.inDelChar) || '-';
 
         // Grid table
-        var table = [];
+        let table = [];
 
         // Initialize table
         // r: row, c: col
-        for (var c = 0; c < sCol.length + 1; c++) {
+        for (let c = 0; c < sCol.length + 1; c++) {
             table[c] = [];
 
             for (var r = 0; r < sRow.length + 1; r++) {
@@ -132,8 +131,8 @@ module.exports = (function() {
         var alignedRow = [];
         var alignedCol = [];
 
-        for (var c = table.length - 1, r = table[0].length - 1; c > 0 || r > 0; ) {
-            var arrows = table[c][r].arrows;
+        for (let c = table.length - 1, r = table[0].length - 1; c > 0 || r > 0; ) {
+            let arrows = table[c][r].arrows;
             //console.log(arrows);
 
             switch (arrows[0]) { // TODO: Only supports the first path (diagonal path in priority)
