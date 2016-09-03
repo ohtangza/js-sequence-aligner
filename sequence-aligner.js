@@ -61,7 +61,7 @@ module.exports = (function() {
         // Parameters
         var sMatch = (params && params.sMatch) || 1;
         var sMismatch = (params && params.sMismatch) || -1;
-        //var sGapStart = -1;
+        var sGapStart = (params && params.sGapStart) || -1;
         var sGapCont = (params && params.sGapCont) || -1;
         var inDelChar = (params && params.inDelChar) || '-';
 
@@ -100,12 +100,13 @@ module.exports = (function() {
                 let cell = table[c][r];
 
                 //console.log(r + ":" + sRow[r-1] + ' , ' + c + ":" + sCol[c-1]);
-                var scoreMatch = table[c-1][r-1].score + (sCol[c-1] == sRow[r-1] ? sMatch : sMismatch);
-                var scoreLeft = table[c-1][r].score + sGapCont;
-                var scoreAbove = table[c][r-1].score + sGapCont;
+
+                let scoreMatch = table[c-1][r-1].score + (sCol[c-1] == sRow[r-1] ? sMatch : sMismatch);
+                let scoreLeft = table[c-1][r].score + sGapCont;
+                let scoreAbove = table[c][r-1].score + sGapCont;
 
                 // TODO: Implement the panelty for InDel continuted!
-                var updatedScore = Math.max(scoreMatch, scoreLeft, scoreAbove);
+                let updatedScore = Math.max(scoreMatch, scoreLeft, scoreAbove);
                 cell.score = updatedScore;
 
                 if (updatedScore == scoreMatch) {
@@ -128,8 +129,8 @@ module.exports = (function() {
         // printTable(table, true);
 
         // Track back the arrows to rebuild the aligned strings
-        var alignedRow = [];
-        var alignedCol = [];
+        let alignedRow = [];
+        let alignedCol = [];
 
         for (let c = table.length - 1, r = table[0].length - 1; c > 0 || r > 0; ) {
             let arrows = table[c][r].arrows;
@@ -137,19 +138,22 @@ module.exports = (function() {
 
             switch (arrows[0]) { // TODO: Only supports the first path (diagonal path in priority)
                 case 'D':
-                    alignedRow.push(sRow[r-1]); // PROBLEM!
+                    // Case: Add non-gap items to row and column arrays
+                    alignedRow.push(sRow[r-1]);
                     alignedCol.push(sCol[c-1]);
                     r -= 1;
                     c -= 1;
                     break;
 
                 case 'L':
+                    // Case: Add non-gap item to column array and gap item to row array
                     alignedRow.push(inDelChar);
                     alignedCol.push(sCol[c-1]);
                     c -= 1;
                     break;
 
                 case 'A':
+                    // Case: Add non-gap item to row array and gap item to column array
                     alignedRow.push(sRow[r-1]);
                     alignedCol.push(inDelChar);
                     r -= 1;
