@@ -49,7 +49,7 @@ module.exports = (function() {
      * @param   {Array}     s2
      * @return  {Object}    object containing aligned array with key s1 and s2
      */
-    function alignment(s1, s2, params) {
+    function align(s1, s2, params) {
         // Algorithm: Needleman-Wunsch
 
         //console.log('s1: ' + s1);
@@ -180,6 +180,6 @@ module.exports = (function() {
 
     return {
         /* Public methods */
-        alignment: alignment
+        align: align
     };
 }());
