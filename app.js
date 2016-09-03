@@ -1,4 +1,4 @@
-var aligner = require('./sequenceAligner.js');
+var aligner = require('./sequence-aligner.js');
 var utils = require('./utils.js');
 
 /*
