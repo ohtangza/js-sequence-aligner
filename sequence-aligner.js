@@ -102,7 +102,7 @@ module.exports = (function() {
                 //console.log(r + ":" + sRow[r-1] + ' , ' + c + ":" + sCol[c-1]);
                 var scoreMatch = table[c-1][r-1].score + (sCol[c-1] == sRow[r-1] ? sMatch : sMismatch);
                 var scoreLeft = table[c-1][r].score + sGapCont;
-                var scoreAbove = table[c][r-1].score + sGapCont; // TODO: Insert and Delete might be changed
+                var scoreAbove = table[c][r-1].score + sGapCont;
 
                 // TODO: Implement the panelty for InDel continuted!
                 var updatedScore = Math.max(scoreMatch, scoreLeft, scoreAbove);
@@ -154,10 +154,9 @@ module.exports = (function() {
                     alignedCol.push(inDelChar);
                     r -= 1;
                     break;
-
                 default:
-                    console.log(c + " , " + r);
-                    console.error('Arrow error!');
+                    console.log();
+                    console.error(`Arrow error at idx of c=${c}, r=${r}`);
                     process.exit();
                     break;
 
@@ -174,7 +173,7 @@ module.exports = (function() {
         return {
             s1: alignedRow,
             s2: alignedCol
-        }
+        };
     }
 
     return {
