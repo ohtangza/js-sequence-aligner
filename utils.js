@@ -1,8 +1,10 @@
 var stem = require('stem-porter');
+var includes = require('array-includes');
 
 module.exports = (function() {
 
-    var stopWords = "a,able,about,above,abst,accordance,according,accordingly,across,act,actually,added,adj,\
+    var stopWords = "a";
+    /*"a,able,about,above,abst,accordance,according,accordingly,across,act,actually,added,adj,\
     affected,affecting,affects,after,afterwards,again,against,ah,all,almost,alone,along,already,also,although,\
     always,am,among,amongst,an,and,announce,another,any,anybody,anyhow,anymore,anyone,anything,anyway,anyways,\
     anywhere,apparently,approximately,are,aren,arent,arise,around,as,aside,ask,asking,at,auth,available,away,awfully,\
@@ -36,19 +38,30 @@ module.exports = (function() {
     welcome,we'll,went,were,weren't,we've,what,whatever,what'll,whats,when,whence,whenever,where,whereafter,whereas,whereby,wherein,\
     wheres,whereupon,wherever,whether,which,while,whim,whither,who,whod,whoever,whole,who'll,whom,whomever,whos,whose,why,widely,\
     willing,wish,with,within,without,won't,words,world,would,wouldn't,www,x,y,yes,yet,you,youd,you'll,your,youre,yours,yourself,\
-    yourselves,you've,z,zero".split(',');
+    yourselves,you've,z,zero".split(',');*/
 
     function preProcess(str) {
+        // Convert completely human readable string to the input of sequence aligner
         return str
-            .toLowerCase()
-            .replace(/\./g, '').replace(/\,/g, '')
             .split(' ')
-            .map((word) => { return stem(word.trim()); })
-            .filter((word) => { return stopWords.indexOf(word) == -1; });
+            .map((word) => {
+                return getTextKey(word);
+            })
+            .filter((word) => { return !this.isStopWord(word); });
+    }
+
+    function getTextKey(text) {
+        return stem(text.toLowerCase().replace(/\./g, '').replace(/\,/g, '').trim());
+    }
+
+    function isStopWord(text) {
+        return includes(stopWords, text);
     }
 
     return {
-        preProcess: preProcess
+        preProcess: preProcess,
+        isStopWord: isStopWord,
+        getTextKey: getTextKey
     };
 
 }());
